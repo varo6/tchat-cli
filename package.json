@@ -1,0 +1,42 @@
+{
+  "name": "tchat-cli",
+  "version": "0.1.0",
+  "description": "Open t3.chat with a prefilled prompt from the CLI.",
+  "type": "module",
+  "bin": {
+    "tchat": "./dist/tchat.js"
+  },
+  "files": [
+    "dist/tchat.js",
+    "README.md",
+    "tchat.ts"
+  ],
+  "scripts": {
+    "build": "bun build ./tchat.ts --target=bun --minify --outfile=dist/tchat.js",
+    "prepublishOnly": "bun run build"
+  },
+  "keywords": [
+    "bun",
+    "cli",
+    "tchat",
+    "t3chat",
+    "t3",
+    "link",
+    "prompt"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/varo6/tchat-cli.git"
+  },
+  "bugs": {
+    "url": "https://github.com/varo6/tchat-cli/issues"
+  },
+  "homepage": "https://github.com/varo6/tchat-cli#readme",
+  "license": "UNLICENSED",
+  "engines": {
+    "bun": ">=1.0.0"
+  },
+  "devDependencies": {
+    "@types/bun": "latest"
+  }
+}
