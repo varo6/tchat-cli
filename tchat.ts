@@ -260,7 +260,9 @@ async function readStdin(mode: StdinMode): Promise<string> {
 
 function buildUrl(baseUrl: string, model: string, query: string): string {
   const url = new URL(baseUrl);
-  url.searchParams.set("model", model);
+  if (model) {
+    url.searchParams.set("model", model);
+  }
   url.searchParams.set("q", query);
   return url.toString();
 }
@@ -321,11 +323,6 @@ async function main(): Promise<void> {
     console.error(parsed.error);
     console.error("");
     console.error(HELP);
-    process.exit(1);
-  }
-
-  if (!parsed.model.trim()) {
-    console.error("Model cannot be empty.");
     process.exit(1);
   }
 
