@@ -3,7 +3,7 @@ import { spawn } from "node:child_process";
 import { homedir } from "node:os";
 import { join } from "node:path";
 
-const DEFAULT_MODEL = "gemini-2.0-flash-lite-preview-02-05";
+const DEFAULT_MODEL = "";
 const DEFAULT_BASE_URL = "https://t3.chat/new";
 const CONFIG_PATH = join(homedir(), ".config", "tchat", "config.json");
 const URL_LENGTH_WARNING_THRESHOLD = 8000;
