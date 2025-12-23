@@ -2,6 +2,8 @@
 import { spawn } from "node:child_process";
 import { homedir } from "node:os";
 import { join } from "node:path";
+import { runConfigMenu } from "./src/config";
+import { showUpdateBanner, triggerBackgroundCheck, performUpdateCheck } from "./src/update";
 
 const DEFAULT_MODEL = "";
 const DEFAULT_BASE_URL = "https://t3.chat/new";
@@ -20,6 +22,7 @@ Options:
   --print                 Print the URL instead of opening
   --stdin                 Read stdin even if TTY
   --no-stdin              Ignore stdin
+  --config                Configure default chat provider
   -h, --help              Show this help
 
 Config file: ~/.config/tchat/config.json
@@ -126,7 +129,7 @@ function requireValue(
   return { value, newIndex: ctx.index + 1 };
 }
 
-function parseArgs(argv: string[], config: Config): ParsedArgs {
+async function parseArgs(argv: string[], config: Config): Promise<ParsedArgs> {
   const ctx: ArgParseContext = {
     argv,
     index: 0,
@@ -149,6 +152,16 @@ function parseArgs(argv: string[], config: Config): ParsedArgs {
 
     if (arg === "-h" || arg === "--help") {
       return createHelpResult(ctx);
+    }
+
+    if (arg === "--config") {
+      await runConfigMenu();
+      process.exit(0);
+    }
+
+    if (arg === "--internal-check-update") {
+      await performUpdateCheck();
+      process.exit(0);
     }
 
     if (arg === "-m" || arg === "--model") {
@@ -311,8 +324,11 @@ function openUrl(url: string, openCmd?: string): Promise<void> {
 // --- Main ---
 
 async function main(): Promise<void> {
+  // Show update banner (non-blocking, reads local file only)
+  await showUpdateBanner();
+
   const config = await loadConfig();
-  const parsed = parseArgs(process.argv.slice(2), config);
+  const parsed = await parseArgs(process.argv.slice(2), config);
 
   if (parsed.showHelp) {
     console.log(HELP);
@@ -396,6 +412,9 @@ async function main(): Promise<void> {
     console.error(message);
     process.exit(1);
   }
+
+  // Trigger background update check (non-blocking, spawns detached process)
+  await triggerBackgroundCheck();
 }
 
 void main();
