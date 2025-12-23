@@ -5,7 +5,7 @@ Open t3.chat with a prefilled prompt from the CLI.
 ## Install
 
 ```bash
-bun i -g tchat-cli
+bun i -g @varo6/tchat-cli
 ```
 
 ## Usage

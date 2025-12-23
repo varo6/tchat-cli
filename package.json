@@ -1,6 +1,6 @@
 {
-  "name": "tchat-cli",
-  "version": "0.1.0",
+  "name": "@varo6/tchat-cli",
+  "version": "0.1.1",
   "description": "Open t3.chat & chatGPT with a prefilled prompt from the CLI.",
   "type": "module",
   "bin": {
@@ -14,6 +14,9 @@
   "scripts": {
     "build": "bun build ./tchat.ts --target=bun --minify --outfile=dist/tchat.js",
     "prepublishOnly": "bun run build"
+  },
+  "publishConfig": {
+    "access": "public"
   },
   "keywords": [
     "bun",
