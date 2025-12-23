@@ -47,7 +47,9 @@ Config file location is: `~/.config/tchat/config.json`
 }
 ```
 
-baseUrl for chagpt is: https://chatgpt.com/ and it is recommended to set `model`as `""`
+You can find a list of available model IDs [here](docs/models.md).
+
+baseUrl for chagpt is: https://chatgpt.com/ and it is recommended to set `model` as `""`
 
 
 ## Options
