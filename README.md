@@ -1,23 +1,58 @@
-# tchat-cli
+# tchat-cli 🔗
 
-Open t3.chat with a prefilled prompt from the CLI.
+Open t3.chat & chatGPT with a prefilled prompt from the CLI with quick file support.
+
+![Demo](https://raw.githubusercontent.com/varo6/tchat-cli/main/assets/demo.gif)
 
 ## Install
+
+The package is just 17kb before minify, with no dependencies added 🪶
 
 ```bash
 bun i -g @varo6/tchat-cli
 ```
 
+
+[Bun](https://bun.sh/) is needed as we use their native File I/O api.
+
 ## Usage
+
+Although it is recommended, tchat can be used with or without wrapping with `""`.
 
 ```bash
 tchat "hi! how are you"
+tchat -f README.md -f tchat.ts review these files
+```
+
+There's also sending context from stdin and print the url without opening the browser
+
+```bash
 echo "context from stdin" | tchat --stdin "extra prompt"
-tchat -f README.md -f tchat.ts "review these files"
 tchat --print "only output the URL"
 ```
 
+
+
+## Config
+
+Default options are `t3.chat` with last used model as the default. You are free to change either the `model`, `baseUrl` , or browser with `openCmd`
+
+Config file location is: `~/.config/tchat/config.json`
+
+```json
+{
+  "model": "model-id",
+  "baseUrl": "https://t3.chat/new",
+  "openCmd": "firefox"
+}
+```
+
+baseUrl for chagpt is: https://chatgpt.com/ and it is recommended to set `model`as `""`
+
+
 ## Options
+
+Options that can make your experience better
 
 ```text
 -m, --model <model>     Model id (env: TCHAT_MODEL)
@@ -30,24 +65,17 @@ tchat --print "only output the URL"
 -h, --help              Show help
 ```
 
-## Config
 
-Config file: `~/.config/tchat/config.json`
-
-```json
-{
-  "model": "model-id",
-  "baseUrl": "https://t3.chat/new",
-  "openCmd": "firefox"
-}
-```
-
-Priority: CLI flags > env vars > config file > defaults.
 
 ## Build (optional)
 
-The published package uses a bundled/minified build for faster cold starts.
+The published package uses a bundled/minified build.
 
 ```bash
 bun run build
 ```
+
+
+## About the package
+
+Huge thanks to theo, markr and t3.chat team for developing such a great product. This package is intended to use with quick prompts and small files and not for abusing the chat. The package will be changed or deleted if it breaks any of the terms of service
