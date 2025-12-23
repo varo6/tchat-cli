@@ -1,12 +1,12 @@
 # tchat-cli 🔗
 
-Open t3.chat & chatGPT with a prefilled prompt from the CLI with quick file support.
+Open t3.chat, chatGPT & more with a prefilled prompt from the CLI with quick file support!
 
-![Demo](https://raw.githubusercontent.com/varo6/tchat-cli/main/assets/demo.gif)
+![Demo](https://raw.githubusercontent.com/varo6/tchat-cli/main/assets/demo.webp)
 
 ## Install
 
-The package is just 17kb before minify, with no dependencies added 🪶
+The package is just 22kb before minify, with no dependencies added 🪶
 
 ```bash
 bun i -g @varo6/tchat-cli
@@ -32,10 +32,11 @@ tchat --print "only output the URL"
 ```
 
 
+tchat works better on linux. Expect some problems in Windows until testing is done.
 
 ## Config
 
-Default options are `t3.chat` with last used model as the default. You are free to change either the `model`, `baseUrl` , or browser with `openCmd`
+Some options can be chosen  with an interactive menu by typing `tchat --config` . Default options are `t3.chat` with last used model as the default. You are free to change either the `model`, `baseUrl` , or browser with `openCmd`
 
 Config file location is: `~/.config/tchat/config.json`
 

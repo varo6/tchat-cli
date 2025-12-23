@@ -44,16 +44,16 @@ async function saveConfig(state: State): Promise<void> {
   await Bun.write(CONFIG_PATH, JSON.stringify(config, null, 2) + "\n");
 }
 
-function render(state: State, cursor: number): void {
+function render(cursor: number, omarchy: boolean): void {
   console.clear();
   console.log("Select default chat provider:\n");
   OPTIONS.forEach((opt, i) => {
-    const dot = i === state.provider ? "\x1b[36m●\x1b[0m" : "○";
+    const dot = cursor === i ? "\x1b[36m●\x1b[0m" : "○";
     const arrow = cursor === i ? "\x1b[36m>\x1b[0m " : "  ";
     console.log(`${arrow}${dot} ${opt.label}`);
   });
   console.log("");
-  const check = state.omarchy ? "\x1b[36m[x]\x1b[0m" : "[ ]";
+  const check = omarchy ? "\x1b[36m[x]\x1b[0m" : "[ ]";
   const arrow = cursor === OPTIONS.length ? "\x1b[36m>\x1b[0m " : "  ";
   console.log(`${arrow}${check} Omarchy webapp`);
   console.log("\n\x1b[90m↑/↓ move, Space select, Enter confirm, q cancel\x1b[0m");
@@ -61,9 +61,10 @@ function render(state: State, cursor: number): void {
 
 export async function runConfigMenu(): Promise<void> {
   const state = await loadState();
-  let cursor = 0;
+  let cursor = state.provider;
+  let omarchy = state.omarchy;
   const totalItems = OPTIONS.length + 1;
-  render(state, cursor);
+  render(cursor, omarchy);
 
   process.stdin.setRawMode(true);
   process.stdin.resume();
@@ -77,20 +78,20 @@ export async function runConfigMenu(): Promise<void> {
       return;
     }
     if (key === "\r" || key === "\n") {
+      const provider = cursor < OPTIONS.length ? cursor : state.provider;
       process.stdin.setRawMode(false);
-      await saveConfig(state);
+      await saveConfig({ provider, omarchy });
       console.clear();
-      const omarchyStatus = state.omarchy ? " (Omarchy webapp)" : "";
-      console.log(`Set to: ${OPTIONS[state.provider].label}${omarchyStatus}`);
+      const omarchyStatus = omarchy ? " (Omarchy webapp)" : "";
+      console.log(`Set to: ${OPTIONS[provider].label}${omarchyStatus}`);
       console.log(`Saved to: ${CONFIG_PATH}`);
       return;
     }
     if (key === "\x1b[A" || key === "k") cursor = (cursor - 1 + totalItems) % totalItems;
     if (key === "\x1b[B" || key === "j") cursor = (cursor + 1) % totalItems;
-    if (key === " ") {
-      if (cursor < OPTIONS.length) state.provider = cursor;
-      else state.omarchy = !state.omarchy;
+    if (key === " " && cursor === OPTIONS.length) {
+      omarchy = !omarchy;
     }
-    render(state, cursor);
+    render(cursor, omarchy);
   }
 }
