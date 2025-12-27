@@ -6,7 +6,7 @@ import { join } from "node:path";
 // XDG Base Directory: update info is cached/non-essential data
 const CACHE_DIR = join(process.env.XDG_CACHE_HOME || join(homedir(), ".cache"), "tchat");
 const UPDATE_PATH = join(CACHE_DIR, "update.json");
-const CURRENT_VERSION = "0.1.3";
+const CURRENT_VERSION = "0.1.4";
 const NPM_REGISTRY_URL = "https://registry.npmjs.org/@varo6/tchat-cli/latest";
 const CHECK_INTERVAL_MS = 12 * 60 * 60 * 1000; // 12 hours
 
