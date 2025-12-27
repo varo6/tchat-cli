@@ -299,8 +299,9 @@ function openUrl(url: string, openCmd?: string): Promise<void> {
         command = "open";
       } else if (platform === "win32") {
         command = "cmd";
-        // URL must be quoted to prevent & from being interpreted as command separator
-        args = ["/c", "start", "", `"${url}"`];
+        // Escape & for cmd (& is command separator, ^& escapes it)
+        const escapedUrl = url.replace(/&/g, "^&");
+        args = ["/c", "start", "", escapedUrl];
       }
     }
 
