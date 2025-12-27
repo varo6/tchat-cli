@@ -3,6 +3,7 @@ import { spawn } from "node:child_process";
 import { homedir } from "node:os";
 import { join } from "node:path";
 import { runConfigMenu } from "./src/config";
+import { performModelsFetch } from "./src/loadModels";
 import { showUpdateBanner, triggerBackgroundCheck, performUpdateCheck } from "./src/update";
 
 const DEFAULT_MODEL = "";
@@ -164,6 +165,11 @@ async function parseArgs(argv: string[], config: Config): Promise<ParsedArgs> {
       process.exit(0);
     }
 
+    if (arg === "--internal-fetch-models") {
+      await performModelsFetch();
+      process.exit(0);
+    }
+
     if (arg === "-m" || arg === "--model") {
       const result = requireValue(ctx, "--model");
       if ("error" in result) return result.error;
@@ -293,7 +299,8 @@ function openUrl(url: string, openCmd?: string): Promise<void> {
         command = "open";
       } else if (platform === "win32") {
         command = "cmd";
-        args = ["/c", "start", "", url];
+        // URL must be quoted to prevent & from being interpreted as command separator
+        args = ["/c", "start", "", `"${url}"`];
       }
     }
 

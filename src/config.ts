@@ -1,9 +1,9 @@
 import { homedir } from "node:os";
 import { join, dirname } from "node:path";
 import { mkdirSync } from "node:fs";
+import { loadModels, type Model } from "./loadModels";
 
 const CONFIG_PATH = join(homedir(), ".config", "tchat", "config.json");
-const MODELS_PATH = join(dirname(import.meta.dir), "docs", "models.md");
 const OMARCHY_CMD = "omarchy-launch-webapp";
 
 const OPTIONS = [
@@ -12,7 +12,6 @@ const OPTIONS = [
   { label: "Claude", baseUrl: "https://claude.ai/new" },
 ];
 
-type Model = { name: string; id: string };
 type State = { provider: number; omarchy: boolean; model?: string };
 
 function readKey(): Promise<string> {
@@ -23,25 +22,6 @@ function readKey(): Promise<string> {
     };
     process.stdin.on("data", onData);
   });
-}
-
-async function loadModels(): Promise<Model[]> {
-  try {
-    const file = Bun.file(MODELS_PATH);
-    if (await file.exists()) {
-      const content = await file.text();
-      const models: Model[] = [];
-      for (const line of content.split("\n")) {
-        // Match: | Name | `model-id` |
-        const match = line.match(/^\|\s*(.+?)\s*\|\s*`([^`]+)`\s*\|$/);
-        if (match && match[1] !== ":---") {
-          models.push({ name: match[1].trim(), id: match[2] });
-        }
-      }
-      return models;
-    }
-  } catch {}
-  return [];
 }
 
 async function loadState(): Promise<State> {
@@ -261,7 +241,7 @@ export async function runConfigMenu(): Promise<void> {
           const models = await loadModels();
           if (models.length === 0) {
             console.clear();
-            console.log("No models found in docs/models.md");
+            console.log("No models available. Check your internet connection.");
             process.stdin.setRawMode(false);
             return;
           }
